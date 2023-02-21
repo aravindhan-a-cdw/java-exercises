@@ -28,17 +28,3 @@ public class Prime {
 	}
 
 }
-
-class Number {
-	int value;
-	
-	public Number(int num) {
-		this.value = num;
-	}
-	
-	public boolean isPrime() {
-		
-		return false;
-	}
-	
-}

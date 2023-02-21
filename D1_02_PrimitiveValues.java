@@ -1,6 +1,6 @@
 package exercise_1;
 
-public class PrimitiveValues {
+public class D1_02_PrimitiveValues {
 
 		static byte bytePrimitive;	// 8 bit signed with range -128 to 127
 		
