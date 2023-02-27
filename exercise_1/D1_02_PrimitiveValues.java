@@ -32,8 +32,8 @@ public class D1_02_PrimitiveValues {
 		System.out.println(doublePrimitive);
 		System.out.print("Bool: ");
 		System.out.println(boolPrimitive);
-		System.out.print("Char: ");
-		System.out.println(charPrimitive);
+		System.out.println("Char: ");
+		System.out.println(charPrimitive + "!");
 	}
 
 }

@@ -8,7 +8,9 @@ public class PrimitiveValuesReassign {
 		// Numbers 
 		short shortPrimitive = 1112;	// 16 bit signed with range -32768 to 32767
 		int intPrimitive = 111112;	// 32 bit signed with range -2^31 to 2^31 - 1
-		long longPrimitive = 1111111199999999999l * 4782874812344545341l;	// 64 bit signed with range -2^63 to 2^63 - 1
+		long d1 = 1111111199999999999l;
+		long d2 = 4782874812344545341l;
+		long longPrimitive =  d1*d2 ;	// 64 bit signed with range -2^63 to 2^63 - 1
 		// decimal
 		float floatPrimitive = 1.00002f;	// 32 bit 
 		double doublePrimitive = 1111.000000005;	// 64 bit

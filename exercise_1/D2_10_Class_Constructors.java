@@ -4,6 +4,7 @@ public class D2_10_Class_Constructors {
 
 	public static void main(String[] args) {
 		C obj = new C();
+		System.out.println(obj);
 	}
 
 }

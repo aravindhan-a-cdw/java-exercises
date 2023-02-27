@@ -5,11 +5,11 @@ public class D1_15_PrintPrimesAndTypeOfNumber {
 
 	public static void main(String[] args) {
 		try (Scanner scan = new Scanner(System.in)) {
-			System.out.print("Enter starting number: ");
-			int start = scan.nextInt();
-			System.out.print("Enter ending number: ");
-			int end = scan.nextInt();
-			displayPrimes(start, end);
+//			System.out.print("Enter starting number: ");
+//			int start = scan.nextInt();
+//			System.out.print("Enter ending number: ");
+//			int end = scan.nextInt();
+//			displayPrimes(start, end);
 			
 			System.out.print("Enter a number to check its special properities: ");
 			int number = scan.nextInt();

@@ -1,6 +1,6 @@
 package exercise_1;
 
-public class D3_03_Stack {
+public class D3_03_Dy_Stack_Array {
 
 	public static void main(String[] args) throws Exception {
 		Stack stack = new FixedStack(10);
@@ -17,7 +17,7 @@ public class D3_03_Stack {
 		
 		stack = new DynamicStack(10);
 		
-		for(int index = 0; index < 10; index++) {
+		for(int index = 0; index < 100; index++) {
 			stack.push(index);
 		}
 		
@@ -56,7 +56,7 @@ class FixedStack extends Stack{
 
 	@Override
 	public int pop() throws StackUnderFlowException {
-		if(this.currentIndex < 0) throw new StackUnderFlowException();
+		if(this.currentIndex == -1) throw new StackUnderFlowException();
 		this.currentIndex--;
 		return this.stackArray[this.currentIndex + 1];
 	}
@@ -115,6 +115,8 @@ class DynamicStack extends Stack{
 
 class StackUnderFlowException extends Exception{
 	
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String toString() {
 		return "The stack is underflow means no element to pop!";
@@ -124,6 +126,8 @@ class StackUnderFlowException extends Exception{
 }
 
 class StackOverFlowException extends Exception{
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String toString() {
 		return "The stack is overflow means the size of stack is full!";

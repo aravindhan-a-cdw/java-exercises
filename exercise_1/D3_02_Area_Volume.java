@@ -14,9 +14,11 @@ public class D3_02_Area_Volume {
 		
 		Sphere sphere = new Sphere(20);
 		System.out.println(sphere.Area());
+		System.out.println(sphere.Volume());
 		
 		Cuboid cuboid = new Cuboid(10);
 		System.out.println(cuboid.Area());
+		System.out.println(cuboid.Volume());
 	}
 	
 
