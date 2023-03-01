@@ -11,7 +11,7 @@ public class D5_01_Even_Odd_Threading {
 
 	public static void printWithThreads() {
 		ExecutorService exe = Executors.newFixedThreadPool(2);
-
+		
 		exe.execute(() -> {
 			synchronized (System.out) {
 				for (int number = 1; number <= 100; number += 2) {
@@ -28,6 +28,8 @@ public class D5_01_Even_Odd_Threading {
 				}
 			}
 		});
+		
+		
 		
 		exe.shutdown();
 

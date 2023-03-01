@@ -40,7 +40,7 @@ class ThreadExtended extends Thread{
 					e.printStackTrace();
 				}
 			}
-			System.out.println("End of 100 prints");
+//			System.out.println("End of 100 prints");
 			char first = str.charAt(0);
 			first++;
 			str.setCharAt(0, first);

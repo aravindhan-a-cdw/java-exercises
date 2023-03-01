@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 public class D5_07_CountingThread {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Counter count = new Counter();
 		
 		ExecutorService exe = Executors.newFixedThreadPool(2);
@@ -14,43 +13,19 @@ public class D5_07_CountingThread {
 		exe.execute(() -> {
 			
 			while(true) {
-				Thread currThread = Thread.currentThread();
-				currThread.setName("thread-1");
-				System.out.println(currThread.getState());
-//				synchronized(count) {
-					count.increment();
-					if(count.get() % 10 == 0) {
-						System.out.println("Ten Done" + count.get());
-					}
-					else System.out.println(count.get() + currThread.getName());
-//				}
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-				System.out.println(currThread.getState());
+				count.increment();
+				System.out.println(count.get());
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		});
+		
 		exe.execute(() -> {
 			while(true) {
-				Thread currThread = Thread.currentThread();
-				currThread.setName("thread-2");
-				System.out.println(currThread.getState());
-//				synchronized(count) {
-					count.increment();
-					if(count.get() % 10 == 0) {
-						System.out.println("Ten Done" + count.get());
-					}
-					else System.out.println(count.get() + currThread.getName());
-//				}
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				count.displayTenDone();
 			}
 		});
 		exe.shutdown();
@@ -60,6 +35,7 @@ public class D5_07_CountingThread {
 
 class Counter{
 	private int count;
+	private boolean printed;
 	
 	Counter(){
 		count = 0;
@@ -67,16 +43,28 @@ class Counter{
 	
 	synchronized void increment() {
 		count++;
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(count % 10 == 0) {
+			printed=false;
+			notify();
 		}
 	}
 	
-	int get() {
+	synchronized int get() {
 		return count;
+	}
+	
+	synchronized void displayTenDone() {
+		if(count % 10 != 0)
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		if (!printed) {
+			System.out.println("Ten Done");
+			printed = true;
+		}
+		notify();
 	}
 }
 

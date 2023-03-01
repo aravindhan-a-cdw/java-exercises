@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 public class D5_02_Synchronized_Access {
 
 	public static void main(String[] args) {
-		ExecutorService exe = Executors.newFixedThreadPool(2);
+		ExecutorService exe = Executors.newFixedThreadPool(3);
 		
 		exe.execute(() -> {
 			Message.display("[ ------ ");

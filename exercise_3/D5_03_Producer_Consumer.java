@@ -72,7 +72,7 @@ class Inventory{
 	}
 	
 	synchronized void addProduct(Product newProduct) {
-		if(getCount() == 5)
+		if(getCount() == 1)
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -84,7 +84,7 @@ class Inventory{
 	}
 	
 	synchronized void removeProduct() {
-		if(getCount() == 1)
+		if(getCount() == 0)
 			try {
 				wait();
 			} catch (InterruptedException e) {
