@@ -7,7 +7,6 @@ public class FactoryPattern {
 		Magazine mg1 = press.getMagazine();
 		
 		Person p1 = new Person();
-		
 		p1.read(mg1);
 		
 		press = new BusinessMagazinePress();
