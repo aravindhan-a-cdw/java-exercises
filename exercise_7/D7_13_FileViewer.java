@@ -26,6 +26,9 @@ public class D7_13_FileViewer {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Some unexpected exception");
+			e.printStackTrace();
 		}
 	}
 

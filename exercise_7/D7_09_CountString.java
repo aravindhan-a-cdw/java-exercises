@@ -12,6 +12,7 @@ public class D7_09_CountString{
 				String[] words = sentence.split(" ");
 				count += words.length;
 				System.out.println("Number of words entered: " + count);
+				System.out.print("Enter some sentence to count number of words: ");
 			}
 		}
 		

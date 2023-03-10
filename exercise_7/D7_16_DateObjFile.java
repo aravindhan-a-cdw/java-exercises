@@ -13,12 +13,12 @@ public class D7_16_DateObjFile {
 	public static void main(String[] args) {
 		Date date = new Date();
 		System.out.println("Date Object from java: " + date);
-//		ObjectOutputStream objout = null;
-//		ObjectInputStream objin = null;
+		
+//		ObjectOutputStream objOut = null;
+//		ObjectInputStream objIn = null;
 
 		// Write Date to a file
-		try (ObjectOutputStream objout = 
-				new ObjectOutputStream(new FileOutputStream("DateFile.txt"))) {
+		try (ObjectOutputStream objout = new ObjectOutputStream(new FileOutputStream("DateFile.txt"))) {
 			objout.writeObject(date);
 		} catch (IOException e) {
 			e.printStackTrace();

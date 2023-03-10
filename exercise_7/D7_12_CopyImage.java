@@ -11,7 +11,7 @@ import java.io.OutputStream;
 public class D7_12_CopyImage {
 
 	public static void main(String[] args) throws IOException {
-		File image = new File("ssoerror.png");
+		File image = new File("image.png");
 		File copy = new File("copy.png");
 		
 		try (InputStream in = new FileInputStream(image);
