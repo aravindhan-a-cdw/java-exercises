@@ -1,37 +1,61 @@
 package exercise_9.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class InvoiceDTO {
+public class InvoiceDTO implements Comparable<InvoiceDTO>,Serializable {
 	
-	private Integer invoice_no, customer_id;
-	private Date invoice_date;
+	private static final long serialVersionUID = -838961596762804221L;
+	private Integer invoiceNumber, customerID;
+	private Date invoiceDate;
 	
 	public InvoiceDTO() {}
 	
-	public InvoiceDTO(int invoice_no, int customer_id, Date invoice_date) {
-		this.invoice_date = invoice_date;
-		this.customer_id = customer_id;
-		this.invoice_no = invoice_no;
+	public InvoiceDTO(int invoiceNo, int customerID, Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
+		this.customerID = customerID;
+		this.invoiceNumber = invoiceNo;
 	}
 	
-	public Integer getInvoice_no() {
-		return invoice_no;
+	public InvoiceDTO(InvoiceDTO invoiceDto) {
+		this.invoiceDate = invoiceDto.getInvoiceDate();
+		this.invoiceNumber = invoiceDto.getInvoiceNumber();
+		this.customerID = invoiceDto.getCustomerID();
 	}
-	public void setInvoice_no(Integer invoice_no) {
-		this.invoice_no = invoice_no;
+
+	public Integer getInvoiceNumber() {
+		return invoiceNumber;
 	}
-	public Integer getCustomer_id() {
-		return customer_id;
+
+	public void setInvoiceNumber(Integer invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
-	public void setCustomer_id(Integer customer_id) {
-		this.customer_id = customer_id;
+
+	public Integer getCustomerID() {
+		return customerID;
 	}
-	public Date getInvoice_date() {
-		return invoice_date;
+
+	public void setCustomerID(Integer customerID) {
+		this.customerID = customerID;
 	}
-	public void setInvoice_date(Date invoice_date) {
-		this.invoice_date = invoice_date;
+
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
+
+	@Override
+	public String toString() {
+		return "InvoiceDTO [invoiceNumber=" + invoiceNumber + ", customerID=" + customerID + ", invoiceDate="
+				+ invoiceDate + "]";
+	}
+
+	@Override
+	public int compareTo(InvoiceDTO otherDTO) {
+		return this.getInvoiceNumber().compareTo(otherDTO.getInvoiceNumber());
 	}
 
 }

@@ -14,140 +14,143 @@ import user_application.DBHelper;
 
 public class InvoiceDAOImpl extends InvoiceDAO {
 
-	private static InvoiceDAOImpl invDAOobj;
+	private static InvoiceDAOImpl invDaoObj;
 
 	private InvoiceDAOImpl() {
 	}
 
 	public static InvoiceDAOImpl getInvoiceDAOImpl() {
-		if (invDAOobj == null) {
-			invDAOobj = new InvoiceDAOImpl();
-			return invDAOobj;
+		if (invDaoObj == null) {
+			invDaoObj = new InvoiceDAOImpl();
+			return invDaoObj;
 		}
-		return invDAOobj.createClone();
+		return invDaoObj.createClone();
 	}
 
 	private InvoiceDAOImpl createClone() {
-		if (invDAOobj != null) {
+		if (invDaoObj != null) {
 			try {
 				return (InvoiceDAOImpl) super.clone();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception exception) {
+				exception.printStackTrace();
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public InvoiceDTO findByInvoiceID(int inv_id) {
-		InvoiceDTO dto = null;
+	public InvoiceDTO find(int invoiceID) {
+		InvoiceDTO invoiceDto = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from invoice_master where invoice_no=?");
-			ps.setInt(1, inv_id);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				dto = new InvoiceDTO();
-				dto.setInvoice_no(inv_id);
-				dto.setCustomer_id(rs.getInt("customer_id"));
-				dto.setInvoice_date(rs.getDate("invoice_date"));
+			Connection connection = DBHelper.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from invoice_master where invoice_no=?");
+			preparedStatement.setInt(1, invoiceID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				invoiceDto = new InvoiceDTO();
+				invoiceDto.setInvoiceNumber(invoiceID);
+				invoiceDto.setCustomerID(resultSet.getInt("customer_id"));
+				invoiceDto.setInvoiceDate(resultSet.getDate("invoice_date"));
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 		}
-		return dto;
+		return invoiceDto;
 	}
 
 	@Override
-	public InvoiceDTO findByCustomerID(int cus_id) {
-		InvoiceDTO dto = null;
+	public InvoiceDTO findByCustomerID(int customerID) {
+		InvoiceDTO invoiceDto = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from invoice_master where customer_id=?");
-			ps.setInt(1, cus_id);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				dto = new InvoiceDTO();
-				dto.setInvoice_no(rs.getInt("invoice_no"));
-				dto.setCustomer_id(rs.getInt("customer_id"));
-				dto.setInvoice_date(rs.getDate("invoice_date"));
+			Connection connection = DBHelper.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from invoice_master where customer_id=?");
+			preparedStatement.setInt(1, customerID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				invoiceDto = new InvoiceDTO();
+				invoiceDto.setInvoiceNumber(resultSet.getInt("invoice_no"));
+				invoiceDto.setCustomerID(resultSet.getInt("customer_id"));
+				invoiceDto.setInvoiceDate(resultSet.getDate("invoice_date"));
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 			return null;
 		}
-		return dto;
+		return invoiceDto;
 	}
 
 	@Override
 	public Collection<InvoiceDTO> findAll() {
 		List<InvoiceDTO> invoices = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from invoice_master");
+			Connection connection = DBHelper.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from invoice_master");
 
 			invoices = new ArrayList<>();
-			while (rs.next()) {
-				InvoiceDTO dto = new InvoiceDTO();
-				dto.setInvoice_no(rs.getInt("invoice_no"));
-				dto.setCustomer_id(rs.getInt("customer_id"));
-				dto.setInvoice_date(rs.getDate("invoice_date"));
-				invoices.add(dto);
+			while (resultSet.next()) {
+				InvoiceDTO invoiceDto = new InvoiceDTO();
+				invoiceDto.setInvoiceNumber(resultSet.getInt("invoice_no"));
+				invoiceDto.setCustomerID(resultSet.getInt("customer_id"));
+				invoiceDto.setInvoiceDate(resultSet.getDate("invoice_date"));
+				invoices.add(invoiceDto);
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 		}
 		return invoices;
 	}
 
 	@Override
-	public int updateInvoice(InvoiceDTO newInvoice) {
-		int affectedRows = 0;
+	public InvoiceDTO update(InvoiceDTO invoiceDto) {
+		InvoiceDTO updateInvoiceDto = null;
+		
 		try {
-			Connection con = DBHelper.getConnection();
+			Connection connection = DBHelper.getConnection();
 
-			int inv_id = newInvoice.getCustomer_id();
+			int invoiceID = invoiceDto.getInvoiceNumber();
 
-			PreparedStatement ps = con.prepareStatement("select * from invoice_master where invoice_no=?");
-			ps.setInt(1, inv_id);
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from invoice_master where invoice_no=?");
+			preparedStatement.setInt(1, invoiceID);
 
-			ResultSet rs = ps.executeQuery();
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-			if (rs.next()) {
-				ps = con.prepareStatement("update invoice_master set customer_id=?, invoice_date=? where invoice_no=?");
-				ps.setInt(1, newInvoice.getCustomer_id());
-				ps.setDate(2, new Date(newInvoice.getInvoice_date().toInstant().toEpochMilli()));
-				ps.setInt(3, newInvoice.getInvoice_no());
+			if (resultSet.next()) {
+				preparedStatement = connection.prepareStatement("update invoice_master set customer_id=?, invoice_date=? where invoice_no=?");
+				preparedStatement.setInt(1, invoiceDto.getCustomerID());
+				preparedStatement.setDate(2, new Date(invoiceDto.getInvoiceDate().toInstant().toEpochMilli()));
+				preparedStatement.setInt(3, invoiceDto.getInvoiceNumber());
 
-				affectedRows = ps.executeUpdate();
+				if(preparedStatement.executeUpdate() == 1) {
+					updateInvoiceDto = new InvoiceDTO(invoiceDto);					
+				}
 				DBHelper.closeConnection(null);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			DBHelper.closeConnection(exception);
 		}
-		return affectedRows;
+		return updateInvoiceDto;
 	}
 
 	@Override
-	public int deleteInvoiceByID(int inv_id) {
+	public boolean delete(int invoiceID) {
 		int affectedRows = 0;
 		try {
-			Connection con = DBHelper.getConnection();
+			Connection connection = DBHelper.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("delete from invoice_master where invoice_no=?");
-			ps.setInt(1, inv_id);
-			affectedRows = ps.executeUpdate();
+			PreparedStatement preparedStatement = connection.prepareStatement("delete from invoice_master where invoice_no=?");
+			preparedStatement.setInt(1, invoiceID);
+			affectedRows = preparedStatement.executeUpdate();
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			DBHelper.closeConnection(exception);
 		}
-		return affectedRows;
+		return affectedRows != 0;
 	}
 
 }

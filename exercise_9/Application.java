@@ -10,32 +10,34 @@ import exercise_9.dto.ItemDTO;
 public class Application {
 
 	public static void main(String[] args) {
-		CustomerDAOImpl cusImpl = CustomerDAOImpl.getCustomerDAOImpl();
-		CustomerDTO dto = new CustomerDTO();
-		dto.setAddress("T Nagar, Chennai");
-		dto.setCustomer_name("Aravindhan");
-		cusImpl.save(dto);
+		CustomerDAOImpl customerDaoImpl = CustomerDAOImpl.getCustomerDAOImpl();
+		CustomerDTO customerDto = new CustomerDTO();
+		customerDto.setAddress("T Nagar, Chennai");
+		customerDto.setCustomerName("Aravindhan");
+		customerDto = customerDaoImpl.save(customerDto);
 		
-		System.out.println("New ID is :" + dto.getCustomer_id());
+		System.out.println("New ID is :" + customerDto.getCustomerID());
 		
-		ArrayList<CustomerDTO> customers = (ArrayList<CustomerDTO>) cusImpl.findAll();
+		ArrayList<CustomerDTO> customers = (ArrayList<CustomerDTO>) customerDaoImpl.findAll();
 		System.out.println(customers);
 		
-		dto = customers.get(0);
+		customerDto = customers.get(0);
 		
-		dto.setAddress("Salem");
-		cusImpl.updateCustomer(dto);
+		customerDto.setAddress("Salem");
+		customerDaoImpl.update(customerDto);
 		
-		customers = (ArrayList<CustomerDTO>) cusImpl.findAll();
+		customers = (ArrayList<CustomerDTO>) customerDaoImpl.findAll();
 		System.out.println(customers);
 		
-		System.out.println(cusImpl.deleteCustomerByID(customers.get(0).getCustomer_id()));
+		System.out.println(customerDaoImpl.delete(customerDto.getCustomerID()));
 		
-		customers = (ArrayList<CustomerDTO>) cusImpl.findAll();
+		customers = (ArrayList<CustomerDTO>) customerDaoImpl.findAll();
 		System.out.println(customers);
+		
+		testItemDAO();
 	}
 	
-	void testItemDAO() {
+	static void testItemDAO() {
 		ItemDAOImpl itemImpl = ItemDAOImpl.getInvoiceDAOImpl();
 		
 		ItemDTO dto = new ItemDTO();

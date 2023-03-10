@@ -3,28 +3,35 @@ package exercise_9.dto;
 import java.io.Serializable;
 
 
-public class ItemDTO  implements Comparable<ItemDTO>,Serializable{
+public class ItemDTO implements Comparable<ItemDTO>, Serializable{
 
-	private static final long serialVersionUID = -931260797917878872L;
-	private Integer item_id, price;
+	private static final long serialVersionUID = -5328436508058065837L;
+	private Integer itemID, price;
 	private String description;
 	private String unit;
 	
 	public ItemDTO() {}
 
-	public ItemDTO(int item_id, String description, int price, String unit) {
-		this.item_id = item_id;
+	public ItemDTO(int itemID, String description, int price, String unit) {
+		this.itemID = itemID;
 		this.price = price;
 		this.description = description;
 		this.unit = unit;
 	}
 	
-	public Integer getItem_id() {
-		return item_id;
+	public ItemDTO(ItemDTO itemDto) {
+		this.itemID = itemDto.getItemID();
+		this.price = itemDto.getPrice();
+		this.description = itemDto.getDescription();
+		this.unit = itemDto.getUnit();
 	}
 
-	public void setItem_id(Integer item_id) {
-		this.item_id = item_id;
+	public Integer getItemID() {
+		return itemID;
+	}
+
+	public void setItemID(Integer itemID) {
+		this.itemID = itemID;
 	}
 
 	public int getPrice() {
@@ -52,8 +59,14 @@ public class ItemDTO  implements Comparable<ItemDTO>,Serializable{
 	}
 
 	@Override
-	public int compareTo(ItemDTO o) {
-		return this.item_id.compareTo(o.getItem_id());
+	public int compareTo(ItemDTO otherItemDTO) {
+		return this.itemID.compareTo(otherItemDTO.getItemID());
+	}
+
+	@Override
+	public String toString() {
+		return "ItemDTO [itemID=" + itemID + ", price=" + price + ", description=" + description + ", unit=" + unit
+				+ "]";
 	}
 }
 

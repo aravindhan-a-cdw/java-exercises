@@ -5,9 +5,9 @@ import java.util.Collection;
 import exercise_9.dto.ItemDTO;
 
 public abstract class ItemDAO {
-	public abstract ItemDTO findByID(int item_id);
-	public abstract void save(ItemDTO newItem);
+	public abstract ItemDTO find(int itemID);
+	public abstract ItemDTO save(ItemDTO itemDto);
 	public abstract Collection<ItemDTO> findAll();
-	public abstract int updateItem(ItemDTO newItem);
-	public abstract int deleteByID(int item_id);
+	public abstract ItemDTO updateItem(ItemDTO itemDto);
+	public abstract boolean deleteByID(int itemID);
 }

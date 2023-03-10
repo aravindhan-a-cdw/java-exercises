@@ -13,188 +13,173 @@ import user_application.DBHelper;
 
 public class CustomerDAOImpl extends CustomerDAO implements Cloneable {
 
-	private static CustomerDAOImpl cusDAOobj;
+	private static CustomerDAOImpl customerDaoObj;
 
 	private CustomerDAOImpl() {
 	} // Prevent creating new Object directly
 
 	public static CustomerDAOImpl getCustomerDAOImpl() {
-		if (cusDAOobj == null) {
-			cusDAOobj = new CustomerDAOImpl();
-			return cusDAOobj;
+		if (customerDaoObj == null) {
+			customerDaoObj = new CustomerDAOImpl();
+			return customerDaoObj;
 		}
-		return cusDAOobj.createClone();
+		return customerDaoObj.createClone();
 	}
 
 	private CustomerDAOImpl createClone() {
-		if (cusDAOobj != null) {
+		if (customerDaoObj != null) {
 			try {
 				return (CustomerDAOImpl) super.clone();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception exception) {
+				exception.printStackTrace();
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public CustomerDTO findByID(int uid) {
-		CustomerDTO dto = null;
+	public CustomerDTO find(int customerID) {
+		CustomerDTO customerDTO = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from customer_master where customer_id=?");
-			ps.setInt(1, uid);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				dto = new CustomerDTO();
-				dto.setCustomer_id(uid);
-				dto.setCustomer_name(rs.getString("customer_name"));
-				dto.setAddress(rs.getString("address"));
+			Connection connection = DBHelper.getConnection();
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("select * from customer_master where customer_id=?");
+			preparedStatement.setInt(1, customerID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				customerDTO = new CustomerDTO();
+				customerDTO.setCustomerID(customerID);
+				customerDTO.setCustomerName(resultSet.getString("customer_name"));
+				customerDTO.setAddress(resultSet.getString("address"));
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 		}
-		return dto;
+		return customerDTO;
 	}
 
 	@Override
-	public CustomerDTO findByName(String cus_name) {
-		CustomerDTO dto = null;
+	public CustomerDTO findByName(String customerName) {
+		CustomerDTO customerDTO = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from customer_master where customer_name=?");
-			ps.setString(1, cus_name);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				dto = new CustomerDTO();
-				dto.setCustomer_id(rs.getInt("customer_id"));
-				dto.setCustomer_name(rs.getString("customer_name"));
-				dto.setAddress(rs.getString("address"));
+			Connection connection = DBHelper.getConnection();
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("select * from customer_master where customer_name=?");
+			preparedStatement.setString(1, customerName);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				customerDTO = new CustomerDTO();
+				customerDTO.setCustomerID(resultSet.getInt("customer_id"));
+				customerDTO.setCustomerName(resultSet.getString("customer_name"));
+				customerDTO.setAddress(resultSet.getString("address"));
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 		}
-		return dto;
+		return customerDTO;
 	}
 
 	@Override
 	public List<CustomerDTO> findAll() {
 		List<CustomerDTO> customers = null;
 		try {
-			Connection con = DBHelper.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from customer_master");
+			Connection connection = DBHelper.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from customer_master");
 
 			customers = new ArrayList<CustomerDTO>();
 
-			while (rs.next()) {
+			while (resultSet.next()) {
 				CustomerDTO dto = new CustomerDTO();
-				dto.setCustomer_id(rs.getInt("customer_id"));
-				dto.setCustomer_name(rs.getString("customer_name"));
-				dto.setAddress(rs.getString("address"));
+				dto.setCustomerID(resultSet.getInt("customer_id"));
+				dto.setCustomerName(resultSet.getString("customer_name"));
+				dto.setAddress(resultSet.getString("address"));
 				customers.add(dto);
 			}
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			DBHelper.closeConnection(exception);
 		}
 		return customers;
 	}
 
 	@Override
-	public int updateCustomer(CustomerDTO newCustomerDto) {
+	public CustomerDTO update(CustomerDTO customerDto) {
+		CustomerDTO updatedCustomerDto = null;
 
 		try {
-			Connection con = DBHelper.getConnection();
+			Connection connection = DBHelper.getConnection();
 
-			int uid = newCustomerDto.getCustomer_id();
+			int customerID = customerDto.getCustomerID();
 
-			PreparedStatement ps = con.prepareStatement("select * from customer_master where customer_id=?");
-			ps.setInt(1, uid);
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("select * from customer_master where customer_id=?");
+			preparedStatement.setInt(1, customerID);
 
-			ResultSet rs = ps.executeQuery();
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-			if (rs.next()) {
+			if (resultSet.next()) {
+				preparedStatement = connection
+						.prepareStatement("update customer_master set customer_name=?, address=? where customer_id=?");
+				preparedStatement.setString(1, customerDto.getCustomerName());
+				preparedStatement.setString(2, customerDto.getAddress());
+				preparedStatement.setInt(3, customerDto.getCustomerID());
 
-				ps = con.prepareStatement("update customer_master set customer_name=?, address=? where customer_id=?");
-				ps.setString(1, newCustomerDto.getCustomer_name());
-				ps.setString(2, newCustomerDto.getAddress());
-				ps.setInt(3, newCustomerDto.getCustomer_id());
-
-				int n = ps.executeUpdate();
+				int affectedRows = preparedStatement.executeUpdate();
+				if (affectedRows == 0) {
+					throw new SQLException("No rows updated!");
+				}
 				DBHelper.closeConnection(null);
-				return n;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			DBHelper.closeConnection(exception);
 		}
-		return 0;
+		return updatedCustomerDto;
 
 	}
 
 	@Override
-	public int deleteCustomerByID(int cus_id) {
+	public boolean delete(int customerID) {
 		try {
-			Connection con = DBHelper.getConnection();
+			Connection connection = DBHelper.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("delete from customer_master where customer_id=?");
-			ps.setInt(1, cus_id);
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("delete from customer_master where customer_id=?");
+			preparedStatement.setInt(1, customerID);
 
-			int rs = ps.executeUpdate();
+			int affectedRows = preparedStatement.executeUpdate();
 			DBHelper.closeConnection(null);
-			return rs;
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
+			return affectedRows == 1;
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			DBHelper.closeConnection(exception);
 		}
-		return 0;
+		return false;
 	}
 
 	@Override
-	public int deleteCustomerByName(String cus_name) {
+	public CustomerDTO save(CustomerDTO customerDto) {
+		CustomerDTO newCustomerDto = null;
 		try {
-			Connection con = DBHelper.getConnection();
-
-			PreparedStatement ps = con.prepareStatement("delete from customer_master where customer_name=?");
-			ps.setString(1, cus_name);
-
-			int rs = ps.executeUpdate();
-			DBHelper.closeConnection(null);
-			return rs;
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
-		}
-		return 0;
-	}
-
-	@Override
-	public void save(CustomerDTO newCustomerDto) {
-		try {
-			Connection con = DBHelper.getConnection();
-			PreparedStatement ps = con.prepareStatement("insert into customer_master(customer_name, address) VALUES(?, ?) returning customer_id");
-			ps.setString(1, newCustomerDto.getCustomer_name());
-			ps.setString(2, newCustomerDto.getAddress());
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				newCustomerDto.setCustomer_id(rs.getInt(1));
+			Connection connection = DBHelper.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(
+					"insert into customer_master(customer_name, address) VALUES(?, ?) returning customer_id");
+			preparedStatement.setString(1, customerDto.getCustomerName());
+			preparedStatement.setString(2, customerDto.getAddress());
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.next()) {
+				newCustomerDto = new CustomerDTO(customerDto);
+				newCustomerDto.setCustomerID(rs.getInt(1));
 			}
-//			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-//	            if (generatedKeys.next()) {
-//	                newCustomerDto.setCustomer_id(generatedKeys.getInt(1));
-//	            }
-//	            else {
-//	                throw new SQLException("Creating user failed, no ID obtained.");
-//	            }
-//	        }
 			DBHelper.closeConnection(null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			DBHelper.closeConnection(e);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			DBHelper.closeConnection(exception);
 		}
+		return newCustomerDto;
 	}
 
 }
